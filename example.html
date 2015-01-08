@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>SAF.TemplateEngine example</title>
+    <script type="text/javascript" src="./SafTemplateEngine.js"></script>
+    <script type="application/x-javascript">
+        var initialViewer = true;
+        var engine = SAF.TemplateEngine;
+
+        function pageLoaded() {
+            var viewer = document.getElementById("viewer");
+            viewer.innerHTML = "";
+
+            var template =
+                    'My skills:' +
+                    '<%if(this.showSkills) {%>' +
+                    '<%for(var index in this.skills) {%>' +
+                    '<a href="#"><%this.skills[index]%></a>' +
+                    '<%}%>' +
+                    '<%} else {%>' +
+                    '<p>none</p>' +
+                    '<%}%>';
+            console.log(engine.execute(template, {
+                skills: ["js", "html", "css"],
+                showSkills: true
+            }));
+        }
+
+        function WriteToViewer(message, value) {
+            if (!initialViewer) {
+                var newLine = document.createElement("br");
+                viewer.appendChild(newLine);
+                var newMessage = document.createTextNode(message + ': ' + value);
+                viewer.appendChild(newMessage);
+            }
+            else {
+                viewer.innerHTML = message + ': ' + value;
+                initialViewer = false;
+            }
+        }
+    </script>
+</head>
+<body onload="pageLoaded()">
+<div id="viewer">
+    Testing . . .
+</div>
+</body>
+</html>
