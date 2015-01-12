@@ -1,4 +1,5 @@
-// Safely create namespace
+'use strict';
+
 var SAF = SAF || {};
 
 SAF.TemplateEngine = {};
@@ -13,7 +14,7 @@ SAF.TemplateEngine = {};
 
         code ='var r=[];\n';
 
-        while(match = re.exec(html)) {
+        while(var match = re.exec(html)) {
             add(html.slice(cursor, match.index))(match[1], true);
             cursor = match.index + match[0].length;
         }
