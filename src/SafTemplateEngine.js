@@ -1,10 +1,10 @@
-'use strict';
-
 var SAF = SAF || {};
 
 SAF.TemplateEngine = {};
 
 (function(engine) {
+    'use strict';
+
     var re = /<%([^%>]+)?%>/g;
     var reExp = /(^( )?(if|for|else|switch|case|break|{|}))(.*)?/g;
     var code = 'var r=[];\n';
@@ -14,7 +14,8 @@ SAF.TemplateEngine = {};
 
         code ='var r=[];\n';
 
-        while(var match = re.exec(html)) {
+        var match;
+        while(match = re.exec(html)) {
             add(html.slice(cursor, match.index))(match[1], true);
             cursor = match.index + match[0].length;
         }
@@ -22,12 +23,12 @@ SAF.TemplateEngine = {};
         add(html.substr(cursor, html.length - cursor));
         code += 'return r.join("");';
 
-        return new Function(code.replace(/[\r\t\n]/g, '')).apply(options);
+        return function(code.replace(/[\r\t\n]/g, '')).apply(options);
     };
 
     var add = function(line, js) {
         js? (code += line.match(reExp) ? line + '\n' : 'r.push(' + line + ');\n') :
-            (code += line != '' ? 'r.push("' + line.replace(/"/g, '\\"') + '");\n' : '');
+            (code += line !== '' ? 'r.push("' + line.replace(/"/g, '\\"') + '");\n' : '');
         return add;
     };
 }(SAF.TemplateEngine));
